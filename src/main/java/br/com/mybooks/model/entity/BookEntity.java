@@ -51,13 +51,13 @@ public class BookEntity implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "id_reading_data")
-    private ReadingData readingData;
+    private ReadingDataEntity readingData;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(schema = "app", name = "books_authors",
                 joinColumns = @JoinColumn(name = "id_book"),
                 inverseJoinColumns = @JoinColumn(name = "id_author"))
-    private List<Author> authors;
+    private List<AuthorEntity> authors;
 
     public Long getId() {
         return id;
@@ -123,19 +123,19 @@ public class BookEntity implements Serializable {
         this.publisher = publisher;
     }
 
-    public ReadingData getReadingData() {
+    public ReadingDataEntity getReadingData() {
         return readingData;
     }
 
-    public void setReadingData(ReadingData readingData) {
+    public void setReadingData(ReadingDataEntity readingData) {
         this.readingData = readingData;
     }
 
-    public List<Author> getAuthors() {
+    public List<AuthorEntity> getAuthors() {
         return authors;
     }
 
-    public void setAuthors(List<Author> authors) {
+    public void setAuthors(List<AuthorEntity> authors) {
         this.authors = authors;
     }
 

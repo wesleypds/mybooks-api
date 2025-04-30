@@ -12,7 +12,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(schema = "app", name = "reading_datas")
-public class ReadingData implements Serializable {
+public class ReadingDataEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -88,7 +88,7 @@ public class ReadingData implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        ReadingData other = (ReadingData) obj;
+        ReadingDataEntity other = (ReadingDataEntity) obj;
         if (id == null) {
             if (other.id != null)
                 return false;

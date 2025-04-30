@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(schema = "app", name = "authors")
-public class Author implements Serializable {
+public class AuthorEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,7 +65,7 @@ public class Author implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Author other = (Author) obj;
+        AuthorEntity other = (AuthorEntity) obj;
         if (id == null) {
             if (other.id != null)
                 return false;
