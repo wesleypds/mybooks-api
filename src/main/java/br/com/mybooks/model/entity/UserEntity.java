@@ -50,7 +50,7 @@ public class UserEntity implements UserDetails {
     @JoinTable(schema = "app", name = "users_roles",
                 joinColumns = @JoinColumn(name = "id_user"),
                 inverseJoinColumns = @JoinColumn(name = "id_role"))
-    private List<RoleEntity> roles;
+    private List<RoleEntity> permissions;
 
     public Long getId() {
         return id;
@@ -130,23 +130,27 @@ public class UserEntity implements UserDetails {
         this.enabled = enabled;
     }
 
+    public List<RoleEntity> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<RoleEntity> permissions) {
+        this.permissions = permissions;
+    }
+
     public List<String> getRoles() {
         List<String> listNameRoles = new ArrayList<>();
-        for (RoleEntity role : roles) {
+        for (RoleEntity role : permissions) {
             listNameRoles.add(role.getName().name());
         }
         return listNameRoles;
     }
 
-    public void setRoles(List<RoleEntity> roles) {
-        this.roles = roles;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getRoles()
+        return getPermissions()
                 .stream()
-                .map(role -> new SimpleGrantedAuthority(role))
+                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(Collectors.toList());
     }
 
@@ -161,7 +165,7 @@ public class UserEntity implements UserDetails {
         result = prime * result + ((accountNonLocked == null) ? 0 : accountNonLocked.hashCode());
         result = prime * result + ((credentialsNonExpired == null) ? 0 : credentialsNonExpired.hashCode());
         result = prime * result + ((enabled == null) ? 0 : enabled.hashCode());
-        result = prime * result + ((roles == null) ? 0 : roles.hashCode());
+        result = prime * result + ((permissions == null) ? 0 : permissions.hashCode());
         return result;
     }
 
@@ -209,10 +213,10 @@ public class UserEntity implements UserDetails {
                 return false;
         } else if (!enabled.equals(other.enabled))
             return false;
-        if (roles == null) {
-            if (other.roles != null)
+        if (permissions == null) {
+            if (other.permissions != null)
                 return false;
-        } else if (!roles.equals(other.roles))
+        } else if (!permissions.equals(other.permissions))
             return false;
         return true;
     }

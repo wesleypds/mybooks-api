@@ -50,7 +50,6 @@ public class SecurityConfig {
                                             "/v3/api-docs/**"
                                         ).permitAll()
                                         .requestMatchers("/api/**").authenticated()
-                                        .requestMatchers("/api/users").denyAll()
                 )
                 .cors(cors -> {})
                 .build();

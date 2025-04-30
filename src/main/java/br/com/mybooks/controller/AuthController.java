@@ -25,7 +25,7 @@ public class AuthController {
     private AuthService authService;
 
     @SuppressWarnings("rawtypes")
-    @Operation(summary = "Authentication a user and returns a token")
+    @Operation(summary = "Logar com usuário", description = "Este endpoint loga usuários e retorna o token para ser usado nos outros endpoints da API")
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody AccountCredentialsDTO data) {
         if (authService.checkIfParamsIsNotNull(data))
@@ -39,7 +39,7 @@ public class AuthController {
     }
 
     @SuppressWarnings("rawtypes")
-    @Operation(summary = "Refresh token for authenticated user and returns a token")
+    @Operation(summary = "Atualizar token", description = "Este endpoint atualiza o token que foi expirado")
     @PutMapping("/refresh-token")
     public ResponseEntity refreshToken(@PathParam(value = "username") String username,
             @RequestHeader("Authorization") String refreshToken) {
