@@ -28,6 +28,10 @@ public class UserService {
         return repository.findAll();
     }
 
+    public UserEntity findByUsername(String username) {
+        return repository.findByUsername(username);
+    }
+
     private String encodePassword(String password) {
         return securityConfig.passwordEncoder().encode(password.subSequence(0, password.length()));
     }

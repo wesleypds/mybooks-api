@@ -10,15 +10,12 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.mybooks.model.User;
+import br.com.mybooks.model.Person;
 import br.com.mybooks.model.dto.AccountCredentialsDTO;
-import br.com.mybooks.model.entity.UserEntity;
-import br.com.mybooks.model.mapper.UserMapper;
+import br.com.mybooks.model.entity.PersonEntity;
+import br.com.mybooks.model.mapper.PersonMapper;
 import br.com.mybooks.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.websocket.server.PathParam;
 
@@ -59,13 +56,11 @@ public class AuthController {
         return token;
     }
 
-    // @PostMapping("/register")
-    // @Operation(summary = "Cria usuários", description = "Este endpoint cria novos
-    // usuários", tags = "Autenticação")
-    // public ResponseEntity<User> create(@RequestBody User model) {
-    // UserEntity entity = service.create(UserMapper.MAPPER.toEntity(model));
-    // return
-    // ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.MAPPER.toModel(entity));
-    // }
+    @PostMapping("/register")
+    @Operation(summary = "Cria usuários", description = "Este endpoint cria novos usuários", tags = "Autenticação")
+    public ResponseEntity<Person> create(@RequestBody Person model) {
+        PersonEntity entity = authService.register(PersonMapper.MAPPER.toEntity(model));
+        return ResponseEntity.status(HttpStatus.CREATED).body(PersonMapper.MAPPER.toModel(entity));
+    }
 
 }

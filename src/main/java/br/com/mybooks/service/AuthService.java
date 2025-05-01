@@ -11,7 +11,8 @@ import org.springframework.stereotype.Service;
 import br.com.mybooks.auth.impl.JwtTokenProviderImpl;
 import br.com.mybooks.model.dto.AccountCredentialsDTO;
 import br.com.mybooks.model.dto.TokenDTO;
-import br.com.mybooks.repository.UserRepository;
+import br.com.mybooks.model.entity.PersonEntity;
+import br.com.mybooks.model.entity.UserEntity;
 
 @Service
 public class AuthService {
@@ -23,7 +24,10 @@ public class AuthService {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
+
+    @Autowired
+    private PersonService personService;
 
     @SuppressWarnings("rawtypes")
     public ResponseEntity login(AccountCredentialsDTO data) {
@@ -33,7 +37,7 @@ public class AuthService {
 
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 
-            var user = userRepository.findByUsername(username);
+            var user = userService.findByUsername(username);
 
             var tokenResponse = new TokenDTO();
 
@@ -50,7 +54,7 @@ public class AuthService {
 
     @SuppressWarnings("rawtypes")
     public ResponseEntity refreshToken(String username, String refreshToken) {
-        var user = userRepository.findByUsername(username);
+        var user = userService.findByUsername(username);
 
         var tokenResponse = new TokenDTO();
 
@@ -60,6 +64,12 @@ public class AuthService {
             throw new UsernameNotFoundException("Username " + username + " not found!");
         }
         return ResponseEntity.ok(tokenResponse);
+    }
+
+    public PersonEntity register(PersonEntity entity) {
+        UserEntity userEntity = userService.create(entity.getUser());
+        entity.setUser(userEntity);
+        return personService.create(entity);
     }
 
     public Boolean checkIfParamsIsNotNull(String username, String refreshToken) {
