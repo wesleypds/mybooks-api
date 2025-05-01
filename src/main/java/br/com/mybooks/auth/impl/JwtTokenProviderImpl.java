@@ -82,12 +82,14 @@ public class JwtTokenProviderImpl {
                 .strip();
     }
 
+    // Este método retorna o usuário autenticado
     public Authentication getAuthentication(String token) {
         DecodedJWT decodedJWT = decodedToken(token);
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(decodedJWT.getSubject());
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
+    // Método para decodificar o token enviado na requisição
     private DecodedJWT decodedToken(String token) {
         Algorithm alg = Algorithm.HMAC256(secretKey.getBytes());
         JWTVerifier verifier = JWT.require(alg).build();
@@ -95,6 +97,7 @@ public class JwtTokenProviderImpl {
         return decodedJWT;
     }
 
+    // Este método captura o token enviado no Header Authorization
     public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
@@ -103,6 +106,7 @@ public class JwtTokenProviderImpl {
         return null;
     }
 
+    // Este método valida o token enviado na requisição
     public Boolean validateToken(String token) {
         DecodedJWT decodedJWT = decodedToken(token);
         try {
