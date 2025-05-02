@@ -3,22 +3,36 @@ package br.com.mybooks.model;
 import java.io.Serializable;
 import java.util.List;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 public class User implements Serializable {
 
     private Long id;
 
+    @NotBlank(message = "O campo Usuário não pode ser vazio")
+    @Size(max = 45, message = "Usuário não pode conter mais de 45 caractéres")
     private String username;
 
+    @NotBlank(message = "O campo Senha não pode ser vazio")
+    @Size(max = 100, message = "Senha não pode conter mais de 100 caractéres")
     private String password;
 
+    @NotNull
     private Boolean accountNonExpired;
 
+    @NotNull
     private Boolean accountNonLocked;
     
+    @NotNull
     private Boolean credentialsNonExpired;
 
+    @NotNull
     private Boolean enabled;
 
+    @Valid
     private List<Role> permissions;
 
     public Long getId() {

@@ -2,25 +2,33 @@ package br.com.mybooks.model.dto;
 
 import java.io.Serializable;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class AccountCredentialsDTO implements Serializable {
 
-    private String userName;
+    @NotBlank(message = "O campo Usuário não pode ser vazio")
+    @Size(max = 45, message = "Usuário não pode conter mais de 45 caractéres")
+    private String username;
 
+    @NotBlank(message = "O campo Senha não pode ser vazio")
+    @Size(max = 100, message = "Senha não pode conter mais de 100 caractéres")
     private String password;
 
-    public AccountCredentialsDTO() {}
+    public AccountCredentialsDTO() {
+    }
 
-    public AccountCredentialsDTO(String userName, String password) {
-        this.userName = userName;
+    public AccountCredentialsDTO(String username, String password) {
+        this.username = username;
         this.password = password;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -35,7 +43,7 @@ public class AccountCredentialsDTO implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((userName == null) ? 0 : userName.hashCode());
+        result = prime * result + ((username == null) ? 0 : username.hashCode());
         result = prime * result + ((password == null) ? 0 : password.hashCode());
         return result;
     }
@@ -49,10 +57,10 @@ public class AccountCredentialsDTO implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         AccountCredentialsDTO other = (AccountCredentialsDTO) obj;
-        if (userName == null) {
-            if (other.userName != null)
+        if (username == null) {
+            if (other.username != null)
                 return false;
-        } else if (!userName.equals(other.userName))
+        } else if (!username.equals(other.username))
             return false;
         if (password == null) {
             if (other.password != null)

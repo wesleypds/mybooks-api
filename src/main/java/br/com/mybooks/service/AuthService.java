@@ -9,6 +9,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import br.com.mybooks.auth.impl.JwtTokenProviderImpl;
+import br.com.mybooks.exception.InvalidJwtAuthenticationException;
+import br.com.mybooks.exception.RequiredIsNullException;
+import br.com.mybooks.exception.UserExistsException;
 import br.com.mybooks.model.dto.AccountCredentialsDTO;
 import br.com.mybooks.model.dto.TokenDTO;
 import br.com.mybooks.model.entity.PersonEntity;
@@ -29,57 +32,56 @@ public class AuthService {
     @Autowired
     private PersonService personService;
 
-    @SuppressWarnings("rawtypes")
-    public ResponseEntity login(AccountCredentialsDTO data) {
+    public ResponseEntity<?> login(final AccountCredentialsDTO data) {
         try {
-            var username = data.getUserName();
-            var password = data.getPassword();
+            final String username = data.getUsername();
+            final String password = data.getPassword();
 
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 
-            var user = userService.findByUsername(username);
-
-            var tokenResponse = new TokenDTO();
+            final UserEntity user = userService.findByUsername(username);
 
             if (user != null) {
-                tokenResponse = tokenProvider.createAccessToken(username, user.getRoles());
-            } else {
-                throw new UsernameNotFoundException("Username " + username + " not found!");
+                final TokenDTO tokenResponse = tokenProvider.createAccessToken(username, user.getRoles());
+                if (tokenResponse == null)
+                    throw new InvalidJwtAuthenticationException("Não foi possível obter JWT Token para este usuário!");
+            
+                return ResponseEntity.ok(tokenResponse);
             }
-            return ResponseEntity.ok(tokenResponse);
+            throw new UsernameNotFoundException("Usuário " + username + " não foi encontrado!");
         } catch (Exception e) {
-            throw new BadCredentialsException("Invalid username/password suplied!");
+            throw new BadCredentialsException("Usuário ou Senha inválidos!");
         }
     }
 
-    @SuppressWarnings("rawtypes")
-    public ResponseEntity refreshToken(String username, String refreshToken) {
-        var user = userService.findByUsername(username);
-
-        var tokenResponse = new TokenDTO();
+    public ResponseEntity<?> refreshToken(final String username, final String refreshToken) {
+        if (checkIfParamsIsNull(username, refreshToken)) 
+            throw new RequiredIsNullException("Os parâmetros não podem estar vazios!");
+        
+        final UserEntity user = userService.findByUsername(username);
 
         if (user != null) {
-            tokenResponse = tokenProvider.refreshToken(refreshToken);
-        } else {
-            throw new UsernameNotFoundException("Username " + username + " not found!");
+            final TokenDTO tokenResponse = tokenProvider.refreshToken(refreshToken);
+            if (tokenResponse == null)
+                throw new InvalidJwtAuthenticationException("Não foi possível obter JWT Token para este usuário!");
+        
+            return ResponseEntity.ok(tokenResponse);
         }
-        return ResponseEntity.ok(tokenResponse);
+        throw new UsernameNotFoundException("Usuário " + username + " não foi encontrado!");
     }
 
-    public PersonEntity register(PersonEntity entity) {
-        UserEntity userEntity = userService.create(entity.getUser());
+    public PersonEntity register(final PersonEntity entity) {
+        final UserEntity userEntityDB = userService.findByUsername(entity.getUser().getUsername());
+        if (userEntityDB != null) 
+            throw new UserExistsException("Este nome de usuário já existe!");
+        final UserEntity userEntity = userService.create(entity.getUser());
         entity.setUser(userEntity);
         return personService.create(entity);
     }
 
-    public Boolean checkIfParamsIsNotNull(String username, String refreshToken) {
+    public Boolean checkIfParamsIsNull(String username, String refreshToken) {
         return refreshToken == null || refreshToken.isBlank() ||
                 username == null || username.isBlank();
-    }
-
-    public Boolean checkIfParamsIsNotNull(AccountCredentialsDTO data) {
-        return data == null || data.getUserName() == null || data.getUserName().isBlank()
-                || data.getPassword() == null || data.getPassword().isBlank();
     }
 
 }
