@@ -1,7 +1,6 @@
 package br.com.mybooks.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,7 +31,7 @@ public class AuthService {
     @Autowired
     private PersonService personService;
 
-    public ResponseEntity<?> login(final AccountCredentialsDTO data) {
+    public TokenDTO login(final AccountCredentialsDTO data) {
         try {
             final String username = data.getUsername();
             final String password = data.getPassword();
@@ -46,7 +45,7 @@ public class AuthService {
                 if (tokenResponse == null)
                     throw new InvalidJwtAuthenticationException("Não foi possível obter JWT Token para este usuário!");
             
-                return ResponseEntity.ok(tokenResponse);
+                return tokenResponse;
             }
             throw new UsernameNotFoundException("Usuário " + username + " não foi encontrado!");
         } catch (Exception e) {
@@ -54,7 +53,7 @@ public class AuthService {
         }
     }
 
-    public ResponseEntity<?> refreshToken(final String username, final String refreshToken) {
+    public TokenDTO refreshToken(final String username, final String refreshToken) {
         if (checkIfParamsIsNull(username, refreshToken)) 
             throw new RequiredIsNullException("Os parâmetros não podem estar vazios!");
         
@@ -65,7 +64,7 @@ public class AuthService {
             if (tokenResponse == null)
                 throw new InvalidJwtAuthenticationException("Não foi possível obter JWT Token para este usuário!");
         
-            return ResponseEntity.ok(tokenResponse);
+            return tokenResponse;
         }
         throw new UsernameNotFoundException("Usuário " + username + " não foi encontrado!");
     }
