@@ -115,7 +115,7 @@ public class JwtTokenProviderImpl {
             }
             return true;
         } catch (Exception e) {
-            throw new InvalidJwtAuthenticationException("JWT token inválido ou expirado!");
+            throw new InvalidJwtAuthenticationException("Token JWT invalid or expired!");
         }
     }
 

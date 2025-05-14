@@ -43,36 +43,36 @@ public class AuthService {
             if (user != null) {
                 final TokenDTO tokenResponse = tokenProvider.createAccessToken(username, user.getRoles());
                 if (tokenResponse == null)
-                    throw new InvalidJwtAuthenticationException("Não foi possível obter JWT Token para este usuário!");
+                    throw new InvalidJwtAuthenticationException("Unable to get JWT Token for this user!");
             
                 return tokenResponse;
             }
-            throw new UsernameNotFoundException("Usuário " + username + " não foi encontrado!");
+            throw new UsernameNotFoundException(String.format("User %s not found!", username));
         } catch (Exception e) {
-            throw new BadCredentialsException("Usuário ou Senha inválidos!");
+            throw new BadCredentialsException("Invalid username or password!");
         }
     }
 
     public TokenDTO refreshToken(final String username, final String refreshToken) {
         if (checkIfParamsIsNull(username, refreshToken)) 
-            throw new RequiredIsNullException("Os parâmetros não podem estar vazios!");
+            throw new RequiredIsNullException("Parameters cannot be empty!");
         
         final UserEntity user = userService.findByUsername(username);
 
         if (user != null) {
             final TokenDTO tokenResponse = tokenProvider.refreshToken(refreshToken);
             if (tokenResponse == null)
-                throw new InvalidJwtAuthenticationException("Não foi possível obter JWT Token para este usuário!");
+                throw new InvalidJwtAuthenticationException("Unable to get JWT Token for this user!");
         
             return tokenResponse;
         }
-        throw new UsernameNotFoundException("Usuário " + username + " não foi encontrado!");
+        throw new UsernameNotFoundException(String.format("User %s not found!", username));
     }
 
     public PersonEntity register(final PersonEntity entity) {
         final UserEntity userEntityDB = userService.findByUsername(entity.getUser().getUsername());
         if (userEntityDB != null) 
-            throw new UserExistsException("Este nome de usuário já existe!");
+            throw new UserExistsException("This username already exists!");
         final UserEntity userEntity = userService.create(entity.getUser());
         entity.setUser(userEntity);
         return personService.create(entity);

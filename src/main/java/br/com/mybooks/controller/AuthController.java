@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
-@Tag(name = "Autenticação")
+@Tag(name = "Authentication")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -30,13 +30,13 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    @Operation(summary = "Logar com usuário", description = "Este endpoint loga usuários e retorna o token para ser usado nos outros endpoints da API", tags = "Autenticação")
+    @Operation(summary = "Login with user", description = "This endpoint logs in users and returns the token to be used in the other API endpoints.", tags = "Authentication")
     @PostMapping("/login")
     public ResponseEntity<TokenDTO> login(@RequestBody @Valid AccountCredentialsDTO data) {
         return ResponseEntity.status(HttpStatus.OK).body(authService.login(data));
     }
 
-    @Operation(summary = "Atualizar token", description = "Este endpoint atualiza o token que foi expirado", tags = "Autenticação")
+    @Operation(summary = "Refresh token", description = "This endpoint refreshes the token that has expired", tags = "Authentication")
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/refresh-token/{username}")
     public ResponseEntity<TokenDTO> refreshToken(@PathVariable(value = "username") String username,
@@ -45,8 +45,8 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    @Operation(summary = "Criar usuários", description = "Este endpoint cria novos usuários", tags = "Autenticação")
-    public ResponseEntity<Person> create(@RequestBody @Valid Person model) {
+    @Operation(summary = "Register users", description = "This endpoint creates new users", tags = "Authentication")
+    public ResponseEntity<Person> register(@RequestBody @Valid Person model) {
         PersonEntity entity = authService.register(PersonMapper.MAPPER.toEntity(model));
         return ResponseEntity.status(HttpStatus.CREATED).body(PersonMapper.MAPPER.toModel(entity));
     }

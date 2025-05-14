@@ -18,7 +18,7 @@ public class SwaggerConfig {
                 .info(new Info()
                         .title("API MyBooks")
                         .version("v1")
-                        .description("Documentação da API MyBooks"));
+                        .description("API MyBooks documentation"));
     }
 
 }
