@@ -1,4 +1,4 @@
-package br.com.mybooks.auth.filter;
+package br.com.mybooks.filter;
 
 import java.io.IOException;
 
@@ -7,7 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
 
-import br.com.mybooks.auth.impl.JwtTokenProviderImpl;
+import br.com.mybooks.service.JwtTokenProviderService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -17,9 +17,9 @@ import jakarta.servlet.http.HttpServletRequest;
 public class JwtTokenFilter extends GenericFilterBean {
 
     @Autowired
-    private JwtTokenProviderImpl jwtTokenProvider;
+    private JwtTokenProviderService jwtTokenProvider;
 
-    public JwtTokenFilter(JwtTokenProviderImpl jwtTokenProvider) {
+    public JwtTokenFilter(JwtTokenProviderService jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 

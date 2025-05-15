@@ -7,7 +7,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import br.com.mybooks.auth.impl.JwtTokenProviderImpl;
 import br.com.mybooks.exception.InvalidJwtAuthenticationException;
 import br.com.mybooks.exception.RequiredIsNullException;
 import br.com.mybooks.exception.UserExistsException;
@@ -20,7 +19,7 @@ import br.com.mybooks.model.entity.UserEntity;
 public class AuthService {
 
     @Autowired
-    private JwtTokenProviderImpl tokenProvider;
+    private JwtTokenProviderService tokenProvider;
 
     @Autowired
     private AuthenticationManager authenticationManager;

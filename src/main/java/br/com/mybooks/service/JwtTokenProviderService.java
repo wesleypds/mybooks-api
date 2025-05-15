@@ -1,4 +1,4 @@
-package br.com.mybooks.auth.impl;
+package br.com.mybooks.service;
 
 import java.util.Base64;
 import java.util.Date;
@@ -23,7 +23,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Service
-public class JwtTokenProviderImpl {
+public class JwtTokenProviderService {
 
     @Value("${security.jwt.token.secret-key:secret}")
     private String secretKey = "secret";
@@ -32,7 +32,7 @@ public class JwtTokenProviderImpl {
     private long validityInMilliseconds = 3600000;
 
     @Autowired
-    private UserDetailsImpl userDetailsService;
+    private UserService userService;
 
     Algorithm algorithm = null;
 
@@ -85,7 +85,7 @@ public class JwtTokenProviderImpl {
     // Este método retorna o usuário autenticado
     public Authentication getAuthentication(String token) {
         DecodedJWT decodedJWT = decodedToken(token);
-        UserDetails userDetails = this.userDetailsService.loadUserByUsername(decodedJWT.getSubject());
+        UserDetails userDetails = this.userService.loadUserByUsername(decodedJWT.getSubject());
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 

@@ -130,10 +130,6 @@ public class UserEntity implements UserDetails {
         this.enabled = enabled;
     }
 
-    public List<RoleEntity> getPermissions() {
-        return permissions;
-    }
-
     public void setPermissions(List<RoleEntity> permissions) {
         this.permissions = permissions;
     }
@@ -148,9 +144,9 @@ public class UserEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getPermissions()
+        return getRoles()
                 .stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
+                .map(role -> new SimpleGrantedAuthority(role))
                 .collect(Collectors.toList());
     }
 
