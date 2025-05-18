@@ -70,7 +70,7 @@ public class AuthService {
 
     public PersonEntity register(final PersonEntity entity) {
         final UserEntity userEntityDB = userService.findByUsername(entity.getUser().getUsername());
-        if (userEntityDB != null) 
+        if (userEntityDB != null)
             throw new UserExistsException("This username already exists!");
         final UserEntity userEntity = userService.create(entity.getUser());
         entity.setUser(userEntity);

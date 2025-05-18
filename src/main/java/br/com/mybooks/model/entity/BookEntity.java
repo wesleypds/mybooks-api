@@ -2,7 +2,6 @@ package br.com.mybooks.model.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -13,7 +12,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
@@ -32,18 +30,14 @@ public class BookEntity implements Serializable {
 
     private Integer edition;
 
-    @Lob
-    private byte[] cover;
-
     @Column(nullable = false)
     private Integer pages;
 
-    @Lob
-    @Column(nullable = false)
-    private byte[] book;
-
     @Column(name = "shipping_date", nullable = false)
     private LocalDateTime shippingDate;
+
+    @Column(name = "path_file", nullable = false)
+    private String pathFile;
 
     @ManyToOne
     @JoinColumn(name = "id_publisher")
@@ -83,14 +77,6 @@ public class BookEntity implements Serializable {
         this.edition = edition;
     }
 
-    public byte[] getCover() {
-        return cover;
-    }
-
-    public void setCover(byte[] cover) {
-        this.cover = cover;
-    }
-
     public Integer getPages() {
         return pages;
     }
@@ -99,20 +85,20 @@ public class BookEntity implements Serializable {
         this.pages = pages;
     }
 
-    public byte[] getBook() {
-        return book;
-    }
-
-    public void setBook(byte[] book) {
-        this.book = book;
-    }
-
     public LocalDateTime getShippingDate() {
         return shippingDate;
     }
 
     public void setShippingDate(LocalDateTime shippingDate) {
         this.shippingDate = shippingDate;
+    }
+
+    public String getPathFile() {
+        return pathFile;
+    }
+
+    public void setPathFile(String pathFile) {
+        this.pathFile = pathFile;
     }
 
     public PublisherEntity getPublisher() {
@@ -146,9 +132,7 @@ public class BookEntity implements Serializable {
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((title == null) ? 0 : title.hashCode());
         result = prime * result + ((edition == null) ? 0 : edition.hashCode());
-        result = prime * result + Arrays.hashCode(cover);
         result = prime * result + ((pages == null) ? 0 : pages.hashCode());
-        result = prime * result + Arrays.hashCode(book);
         result = prime * result + ((shippingDate == null) ? 0 : shippingDate.hashCode());
         result = prime * result + ((publisher == null) ? 0 : publisher.hashCode());
         result = prime * result + ((readingData == null) ? 0 : readingData.hashCode());
@@ -180,14 +164,10 @@ public class BookEntity implements Serializable {
                 return false;
         } else if (!edition.equals(other.edition))
             return false;
-        if (!Arrays.equals(cover, other.cover))
-            return false;
         if (pages == null) {
             if (other.pages != null)
                 return false;
         } else if (!pages.equals(other.pages))
-            return false;
-        if (!Arrays.equals(book, other.book))
             return false;
         if (shippingDate == null) {
             if (other.shippingDate != null)

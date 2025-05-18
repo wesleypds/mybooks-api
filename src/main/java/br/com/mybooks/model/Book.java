@@ -12,13 +12,11 @@ public class Book implements Serializable {
 
     private Integer edition;
 
-    private byte[] cover;
-
     private Integer pages;
 
-    private byte[] book;
-
     private LocalDateTime shippingDate;
+
+    private String pathFile;
 
     private Publisher publisher;
 
@@ -50,14 +48,6 @@ public class Book implements Serializable {
         this.edition = edition;
     }
 
-    public byte[] getCover() {
-        return cover;
-    }
-
-    public void setCover(byte[] cover) {
-        this.cover = cover;
-    }
-
     public Integer getPages() {
         return pages;
     }
@@ -66,20 +56,20 @@ public class Book implements Serializable {
         this.pages = pages;
     }
 
-    public byte[] getBook() {
-        return book;
-    }
-
-    public void setBook(byte[] book) {
-        this.book = book;
-    }
-
     public LocalDateTime getShippingDate() {
         return shippingDate;
     }
 
     public void setShippingDate(LocalDateTime shippingDate) {
         this.shippingDate = shippingDate;
+    }
+
+    public String getPathFile() {
+        return pathFile;
+    }
+
+    public void setPathFile(String pathFile) {
+        this.pathFile = pathFile;
     }
 
     public Publisher getPublisher() {
