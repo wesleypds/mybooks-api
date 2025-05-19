@@ -1,5 +1,6 @@
 package br.com.mybooks.service;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,17 +18,21 @@ public class PersonService {
     @Autowired
     private PersonRepository repository;
 
+    @Autowired
+    private BookService bookService;
+
     public PersonEntity create(PersonEntity entity) {
         return repository.save(entity);
     }
 
-    public void addBookInPerson(Long idPerson, BookEntity book, MultipartFile file) {
+    public void addBookInPerson(Long idPerson, BookEntity book, MultipartFile file) throws IOException {
         Optional<PersonEntity> db = repository.findById(idPerson);
         if (db.isEmpty()) new ResourceNotFoundException("Person not found!");
-
         PersonEntity entity = db.get();
 
-        entity.getBooks().add(book);
+        BookEntity bookPersisted = bookService.addBook(book, file, entity.getUser().getUsername());
+        entity.getBooks().add(bookPersisted);
+        repository.save(entity);
     }
 
 }
